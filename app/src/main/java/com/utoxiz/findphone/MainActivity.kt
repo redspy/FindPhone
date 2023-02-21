@@ -37,7 +37,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column () {
                         Greeting("Android")
-                        Button(onClick = { /*TODO*/ }) {
+                        Button(onClick = {
+                            SendNotification()
+                        }) {
 
                         }
                     }
