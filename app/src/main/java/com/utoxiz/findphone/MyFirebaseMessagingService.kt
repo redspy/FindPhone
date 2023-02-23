@@ -251,6 +251,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.d(TAG, "token=${it}")
         }
         // eVh8cmA6TKyluftyVWOJ_j:APA91bFm2sUTNggIkmNw8ONpiQUbIic9F2EliKP9xa-4bjdHNLe0Ud4dxQxQXwZvxR9tZsynR_bW6JE8UfuSu00DTciGP1UtVjkGphUC3x1-jL9RRWKCcwLTrTxpUwdMdjEXFIRBR8Jd
+// druk5fN-QMyrvRwOSH1urK:APA91bF1SkrYb4JvK9sXJtAa3lGAmc-H8rTjq1KVNOM6ioFVzyS_oq7cO_w9fDd9zVBWH39tmftkdlFS7k_0t4gymmxRcaDqXMp76qQMg4q9NP3Yx5hcDxApepCOcZ0RFnKzFoYVWV5h
 //		  //동기방식
 //        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
 //                if (!task.isSuccessful) {

@@ -22,6 +22,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+const val SERVER_KEY = "AAAAt3OXB1A:APA91bEdwTCp2-1bKfqJAp6W-Vncrn8Jlvkz4yg9e-3h6olmpFYRd08Qcv-Cy4g6Ab5enfGv6xVCF6Y-WY-DisXGX13LEvesRGBqEOiFfKhf97xUmea9ml6vPPJACZ6ceQECYPNmD0Jb"
+const val MINSU_PHONE = "druk5fN-QMyrvRwOSH1urK:APA91bF1SkrYb4JvK9sXJtAa3lGAmc-H8rTjq1KVNOM6ioFVzyS_oq7cO_w9fDd9zVBWH39tmftkdlFS7k_0t4gymmxRcaDqXMp76qQMg4q9NP3Yx5hcDxApepCOcZ0RFnKzFoYVWV5h"
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     Column () {
                         Greeting("Android")
                         Button(onClick = {
-                            SendNotification()
+                            SendNotification("Let's Go!", "Together", MINSU_PHONE)
                         }) {
 
                         }
@@ -48,11 +50,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    private fun SendNotification() {
-        val title = "Let's Go!"
-        val message = "Together"
-        val recipientToken =
-            "eVh8cmA6TKyluftyVWOJ_j:APA91bFm2sUTNggIkmNw8ONpiQUbIic9F2EliKP9xa-4bjdHNLe0Ud4dxQxQXwZvxR9tZsynR_bW6JE8UfuSu00DTciGP1UtVjkGphUC3x1-jL9RRWKCcwLTrTxpUwdMdjEXFIRBR8Jd"
+    private fun SendNotification(title: String, message: String, recipientToken: String,) {
         if (title.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
             PushNotification(
                 NotificationData(title, message),
@@ -66,7 +64,7 @@ class MainActivity : ComponentActivity() {
         try {
             val response = RetrofitInstance.api.postNotification(notification)
             if(response.isSuccessful) {
-                Log.d(ContentValues.TAG, "Response: ${Gson().toJson(response)}")
+                 Log.d(ContentValues.TAG, response.isSuccessful.toString())
             } else {
                 Log.e(ContentValues.TAG, response.errorBody().toString())
                 //makeToast(response.errorBody().toString())
@@ -83,7 +81,7 @@ class MainActivity : ComponentActivity() {
             for (key in dynamicLinkData.keySet()) {
                 dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
             }
-            Toast.makeText(this@MainActivity, dataStr, Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainActivity, dataStr, Toast.LENGTH_SHORT).show()
             // binding.tvToken.text = dataStr
         }
     }
@@ -92,7 +90,7 @@ class MainActivity : ComponentActivity() {
         MyFirebaseMessagingService().getFirebaseToken()
         /** DynamicLink 수신확인 */
         initDynamicLink()
-        val TOPIC = "/topics/myTopic2"
+        val TOPIC = "minsuTopic"
         MyFirebaseMessagingService.sharedPref = getSharedPreferences("sharedPref", MODE_PRIVATE)
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
     }
