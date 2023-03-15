@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -24,6 +25,7 @@ import kotlinx.coroutines.launch
 
 const val SERVER_KEY = "AAAAt3OXB1A:APA91bEdwTCp2-1bKfqJAp6W-Vncrn8Jlvkz4yg9e-3h6olmpFYRd08Qcv-Cy4g6Ab5enfGv6xVCF6Y-WY-DisXGX13LEvesRGBqEOiFfKhf97xUmea9ml6vPPJACZ6ceQECYPNmD0Jb"
 const val MINSU_PHONE = "druk5fN-QMyrvRwOSH1urK:APA91bF1SkrYb4JvK9sXJtAa3lGAmc-H8rTjq1KVNOM6ioFVzyS_oq7cO_w9fDd9zVBWH39tmftkdlFS7k_0t4gymmxRcaDqXMp76qQMg4q9NP3Yx5hcDxApepCOcZ0RFnKzFoYVWV5h"
+const val INSOOK_PHONE = "egsJhxMfSNutAuuVBO5y-7:APA91bHFb9zQZm2vUdRXLMiU6kJwBCy1SdydTNSMI_S7JvFnSfMytaP-30PvZzcJ5cLAVxIyO6Mpnm07ESmQpQC_XpOTlbn7UC2UN_8jDANjadU3NzGkge0IEOlC4mvgfFPyYHVqK27i"
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +43,15 @@ class MainActivity : ComponentActivity() {
                         Greeting("Android")
                         Button(onClick = {
                             SendNotification("Let's Go!", "Together", MINSU_PHONE)
-                        }) {
-
+                        }, modifier = Modifier.wrapContentSize()) {
+                            Text(text = "민수폰을 찾아라!")
                         }
+                        Button(onClick = {
+                            SendNotification("Let's Go!", "Together", INSOOK_PHONE)
+                        }, modifier = Modifier.wrapContentSize()) {
+                            Text(text = "인숙이폰을 찾아라!")
+                        }
+
                     }
 
                 }
@@ -53,14 +61,14 @@ class MainActivity : ComponentActivity() {
     private fun SendNotification(title: String, message: String, recipientToken: String,) {
         if (title.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
             PushNotification(
-                NotificationData(title, message),
+                NotificationData(title, message, "TAG"),
                 recipientToken
             ).also {
                 sendNotification(it)
             }
         }
     }
-    fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
         try {
             val response = RetrofitInstance.api.postNotification(notification)
             if(response.isSuccessful) {

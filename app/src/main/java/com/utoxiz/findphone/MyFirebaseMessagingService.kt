@@ -53,7 +53,8 @@ data class PushNotification(
 
 data class NotificationData(
     val title: String,
-    val message: String
+    val message: String,
+    val tag: String
 )
 
 class RetrofitInstance {
@@ -104,7 +105,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.d(TAG, "data is not Empty")
             Log.d(TAG, remoteMessage.data["title"].toString())
             Log.d(TAG, remoteMessage.data["body"].toString())
-            sendNotificationData(remoteMessage)
+            sendNotificationData(remoteMessage)// 요기로 오고있음
         }
         else if (remoteMessage.notification != null) {
             Log.e(TAG, "Message Notification Body: " + remoteMessage.notification!!.body)
@@ -160,10 +161,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         catch(e: Exception) {
             callActivityForPolicyAccessSettings()
         }
+
+        var messageType = remoteMessage.data["tag"]
+
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(androidx.core.R.drawable.notification_icon_background) // 아이콘 설정
-            .setContentTitle(remoteMessage.notification?.title) // 제목
-            .setContentText(remoteMessage.notification?.body) // 메시지 내용
+            .setSmallIcon(R.drawable.ic_launcher_foreground) // 아이콘 설정
+            .setContentTitle(remoteMessage.data["title"]) // 제목
+            .setContentText(remoteMessage.data["message"]) // 메시지 내용
             .setAutoCancel(true) // 알람클릭시 삭제여부
             .setSound(soundUri)  // 알림 소리
             .setContentIntent(pendingIntent) // 알림 실행 시 Intent
@@ -225,7 +229,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 알림에 대한 UI 정보, 작업
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(androidx.core.R.drawable.notification_icon_background) // 아이콘 설정
+            //.setSmallIcon(androidx.core.R.drawable.notification_icon_background) // 아이콘 설정
             .setContentTitle(remoteMessage.notification?.title) // 제목
             .setContentText(remoteMessage.notification?.body) // 메시지 내용
             .setAutoCancel(true) // 알람클릭시 삭제여부
@@ -250,17 +254,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
             Log.d(TAG, "token=${it}")
         }
-        // eVh8cmA6TKyluftyVWOJ_j:APA91bFm2sUTNggIkmNw8ONpiQUbIic9F2EliKP9xa-4bjdHNLe0Ud4dxQxQXwZvxR9tZsynR_bW6JE8UfuSu00DTciGP1UtVjkGphUC3x1-jL9RRWKCcwLTrTxpUwdMdjEXFIRBR8Jd
-// druk5fN-QMyrvRwOSH1urK:APA91bF1SkrYb4JvK9sXJtAa3lGAmc-H8rTjq1KVNOM6ioFVzyS_oq7cO_w9fDd9zVBWH39tmftkdlFS7k_0t4gymmxRcaDqXMp76qQMg4q9NP3Yx5hcDxApepCOcZ0RFnKzFoYVWV5h
-//		  //동기방식
-//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-//                if (!task.isSuccessful) {
-//                    Log.d(TAG, "Fetching FCM registration token failed ${task.exception}")
-//                    return@OnCompleteListener
-//                }
-//                var deviceToken = task.result
-//                Log.e(TAG, "token=${deviceToken}")
-//            })
     }
 }
 
